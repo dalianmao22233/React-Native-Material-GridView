@@ -1,18 +1,3 @@
-/**
- * The examples provided by Facebook are for non-commercial testing and
- * evaluation purposes only.
- *
- * Facebook reserves all rights not expressly granted.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
- * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL
- * FACEBOOK BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
- * AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
- * @flow
- */
 'use strict';
 
 var React = require('react-native');
@@ -78,9 +63,11 @@ var rnMaterialDesignGrid = React.createClass({
     var imgSource = THUMB_URLS[rowHash % THUMB_URLS.length];
     return (
         <View>
-          <Ripple>
+          <View style={styles.row}>
             <Image style={styles.thumb} source={imgSource} />
-          </Ripple>
+          </View>
+          <View style={styles.text}>
+          </View>
         </View>
     );
   },
@@ -119,15 +106,15 @@ var styles = StyleSheet.create({
   },
   row: {
     justifyContent: 'center',
-    padding: 5,
-    margin: 3,
-    width: 150,
-    height: 150,
+    // padding: 1,
+    margin: 1,
+    width: 118,
+    height: 118,
     backgroundColor: '#F6F6F6',
     alignItems: 'center',
     borderWidth: 1,
     borderRadius: 5,
-    borderColor: '#CCC'
+    borderColor: '#CCC',
   },
   thumb: {
     width: 118,
@@ -135,8 +122,7 @@ var styles = StyleSheet.create({
   },
   text: {
     flex: 1,
-    marginTop: 5,
-    fontWeight: 'bold'
+    marginTop: 1,
   },
 });
 
