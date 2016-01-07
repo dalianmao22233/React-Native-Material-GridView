@@ -52,6 +52,7 @@ var AwesomeProject = React.createClass({
     fetch(REQUEST_URL)
       .then((response) => response.json())
       .then((responseData) => {
+        console.log("responseData.movies"+JSON.stringify(responseData.movies));
         this.setState({
           dataSource: responseData.movies,
           loaded: true,
@@ -116,4 +117,4 @@ var styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent('GridViewExample', () => AwesomeProject);
+AppRegistry.registerComponent('rnMaterialDesignGrid', () => AwesomeProject);
