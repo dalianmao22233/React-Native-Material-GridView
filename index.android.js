@@ -1,12 +1,28 @@
+/**
+ * The examples provided by Facebook are for non-commercial testing and
+ * evaluation purposes only.
+ *
+ * Facebook reserves all rights not expressly granted.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL
+ * FACEBOOK BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
+ * AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * @flow
+ */
 'use strict';
 
 var React = require('react-native');
 var {
-  AppRegistry,
   Image,
   ListView,
+  TouchableHighlight,
   StyleSheet,
   Text,
+  AppRegistry,
   View,
 } = React;
 
@@ -18,115 +34,123 @@ var {
   Ripple,
 } = rnmd;
 
-var API_KEY = '7waqfqbprs7pajbz28mqf6vz';
-var API_URL = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json';
-var PAGE_SIZE = 25;
-var PARAMS = '?apikey=' + API_KEY + '&page_limit=' + PAGE_SIZE;
-var REQUEST_URL = API_URL + PARAMS;
-var MOVIES_PER_ROW = 3;
+var THUMB_URLS = [
+  require('./Thumbnails/like.png'),
+  require('./Thumbnails/dislike.png'),
+  require('./Thumbnails/call.png'),
+  require('./Thumbnails/fist.png'),
+  require('./Thumbnails/bandaged.png'),
+  require('./Thumbnails/flowers.png'),
+  require('./Thumbnails/heart.png'),
+  require('./Thumbnails/liking.png'),
+  require('./Thumbnails/party.png'),
+  require('./Thumbnails/poke.png'),
+  require('./Thumbnails/superlike.png'),
+  require('./Thumbnails/victory.png'),
+];
 
-var Movie = React.createClass({
-  render: function() {
-      return <View style={styles.movie} >
-        <Image
-          source={{uri: this.props.movie.posters.thumbnail}}
-          style={styles.thumbnail}
-        />
-        <View >
-          <Text 
-          style={styles.title}
-          numberOfLines={3}>{this.props.movie.title}</Text>
-          <Text style={styles.year}>{this.props.movie.year}</Text>
-        </View>
-      </View>
+var rnMaterialDesignGrid = React.createClass({
+
+  statics: {
+    title: '<ListView> - Grid Layout',
+    description: 'Flexbox grid layout.'
   },
-});
 
-var AwesomeProject = React.createClass({
   getInitialState: function() {
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     return {
-      dataSource: null,
-      loaded: false,
+      dataSource: ds.cloneWithRows(this._genRows({})),
     };
   },
 
-  componentDidMount: function() {
-    this.fetchData();
-  },
+  _pressData: ({}: {[key: number]: boolean}),
 
-  fetchData: function() {
-    fetch(REQUEST_URL)
-      .then((response) => response.json())
-      .then((responseData) => {
-        console.log("responseData.movies"+JSON.stringify(responseData.movies));
-        this.setState({
-          dataSource: responseData.movies,
-          loaded: true,
-        });
-      })
-      .done();
+  componentWillMount: function() {
+    this._pressData = {};
   },
 
   render: function() {
-    if (!this.state.loaded) {
-      return this.renderLoadingView();
-    }
-
     return (
-      <GridView
-        items={this.state.dataSource}
-        itemsPerRow={MOVIES_PER_ROW}
-        renderItem={this.renderItem}
-        style={styles.listView}
+      // ListView wraps ScrollView and so takes on its properties.
+      // With that in mind you can use the ScrollView's contentContainerStyle prop to style the items.
+      <ListView
+        contentContainerStyle={styles.list}
+        dataSource={this.state.dataSource}
+        renderRow={this._renderRow}
       />
     );
   },
 
-  renderLoadingView: function() {
+  _renderRow: function(rowData: string, sectionID: number, rowID: number) {
+    var rowHash = Math.abs(hashCode(rowData));
+    var imgSource = THUMB_URLS[rowHash % THUMB_URLS.length];
     return (
-      <View>
-        <Text>
-          Loading movies...
-        </Text>
-      </View>
+      <Ripple>
+        <View>
+          <View style={styles.row}>
+            <Image style={styles.thumb} source={imgSource} />
+            <Text style={styles.text}>
+              {rowData}
+            </Text>
+          </View>
+        </View>
+      </Ripple>
     );
   },
 
-  renderItem: function(item) {
-      return(
-        <View>
-          <Ripple>
-            <Movie movie={item} />
-          </Ripple>
-        </View>
-      );
+  _genRows: function(pressData: {[key: number]: boolean}): Array<string> {
+    var dataBlob = [];
+    for (var ii = 0; ii < 100; ii++) {
+      var pressedText = pressData[ii] ? ' (X)' : '';
+      dataBlob.push('Cell ' + ii + pressedText);
+    }
+    return dataBlob;
+  },
+
+  _pressRow: function(rowID: number) {
+    this._pressData[rowID] = !this._pressData[rowID];
+    this.setState({dataSource: this.state.dataSource.cloneWithRows(
+      this._genRows(this._pressData)
+    )});
   },
 });
+
+/* eslint no-bitwise: 0 */
+var hashCode = function(str) {
+  var hash = 15;
+  for (var ii = str.length - 1; ii >= 0; ii--) {
+    hash = ((hash << 5) - hash) + str.charCodeAt(ii);
+  }
+  return hash;
+};
 
 var styles = StyleSheet.create({
-  movie: {
-    height: 150,
-    flex: 1,
+  list: {
+    justifyContent: 'space-around',
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+  },
+  row: {
+    justifyContent: 'center',
+    padding: 5,
+    margin: 3,
+    width: 100,
+    height: 100,
+    backgroundColor: '#F6F6F6',
     alignItems: 'center',
-    flexDirection: 'column',
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: '#CCC'
   },
-  title: {
-    fontSize: 10,
-    marginBottom: 8,
-    width: 90,
-    textAlign: 'center',
+  thumb: {
+    width: 64,
+    height: 64
   },
-  year: {
-    textAlign: 'center',
-  },
-  thumbnail: {
-    width: 53,
-    height: 81,
-  },
-  listView: {
-    paddingTop: 20,
-    backgroundColor: '#F5FCFF',
+  text: {
+    flex: 1,
+    marginTop: 5,
+    fontWeight: 'bold'
   },
 });
 
-AppRegistry.registerComponent('rnMaterialDesignGrid', () => AwesomeProject);
+AppRegistry.registerComponent('rnMaterialDesignGrid', () => rnMaterialDesignGrid);
