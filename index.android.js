@@ -26,8 +26,6 @@ var {
   View,
 } = React;
 
-var GridView = require('react-native-grid-view');
-
 var rnmd = require('react-native-material-design');
 
 var {
@@ -35,18 +33,12 @@ var {
 } = rnmd;
 
 var THUMB_URLS = [
-  require('./Thumbnails/like.png'),
-  require('./Thumbnails/dislike.png'),
-  require('./Thumbnails/call.png'),
-  require('./Thumbnails/fist.png'),
-  require('./Thumbnails/bandaged.png'),
-  require('./Thumbnails/flowers.png'),
-  require('./Thumbnails/heart.png'),
-  require('./Thumbnails/liking.png'),
-  require('./Thumbnails/party.png'),
-  require('./Thumbnails/poke.png'),
-  require('./Thumbnails/superlike.png'),
-  require('./Thumbnails/victory.png'),
+  require('./Thumbnails/nature1.png'),
+  require('./Thumbnails/nature2.png'),
+  require('./Thumbnails/nature3.png'),
+  require('./Thumbnails/nature4.png'),
+  require('./Thumbnails/nature5.png'),
+  require('./Thumbnails/nature6.png'),
 ];
 
 var rnMaterialDesignGrid = React.createClass({
@@ -85,16 +77,11 @@ var rnMaterialDesignGrid = React.createClass({
     var rowHash = Math.abs(hashCode(rowData));
     var imgSource = THUMB_URLS[rowHash % THUMB_URLS.length];
     return (
-      <Ripple>
         <View>
-          <View style={styles.row}>
+          <Ripple>
             <Image style={styles.thumb} source={imgSource} />
-            <Text style={styles.text}>
-              {rowData}
-            </Text>
-          </View>
+          </Ripple>
         </View>
-      </Ripple>
     );
   },
 
@@ -134,8 +121,8 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 5,
     margin: 3,
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
     backgroundColor: '#F6F6F6',
     alignItems: 'center',
     borderWidth: 1,
@@ -143,8 +130,8 @@ var styles = StyleSheet.create({
     borderColor: '#CCC'
   },
   thumb: {
-    width: 64,
-    height: 64
+    width: 118,
+    height: 118
   },
   text: {
     flex: 1,
