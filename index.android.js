@@ -12,6 +12,12 @@ var {
 
 var GridView = require('react-native-grid-view');
 
+var rnmd = require('react-native-material-design');
+
+var {
+  Ripple,
+} = rnmd;
+
 var API_KEY = '7waqfqbprs7pajbz28mqf6vz';
 var API_URL = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json';
 var PAGE_SIZE = 25;
@@ -87,7 +93,13 @@ var AwesomeProject = React.createClass({
   },
 
   renderItem: function(item) {
-      return <Movie movie={item} />
+      return(
+        <View>
+          <Ripple>
+            <Movie movie={item} />
+          </Ripple>
+        </View>
+      );
   },
 });
 
