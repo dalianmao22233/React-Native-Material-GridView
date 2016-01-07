@@ -6,6 +6,8 @@
     "start": "react-native start"
   },
   "dependencies": {
-    "react-native": "^0.17.0"
+    "react-native": "^0.17.0",
+    "react-native-grid-view": "^0.3.7",
+    "react-native-material-design": "^0.3.0"
   }
 }
