@@ -26,7 +26,7 @@ var THUMB_URLS = [
   require('./Thumbnails/nature6.png'),
 ];
 
-var GridViewComponent = React.createClass({
+var ReactNativeGridView = React.createClass({
 
   statics: {
     title: '<ListView> - Grid Layout',
@@ -126,4 +126,4 @@ var styles = StyleSheet.create({
   },
 });
 
-module.exports = GridViewComponent;
+module.exports = ReactNativeGridView;
