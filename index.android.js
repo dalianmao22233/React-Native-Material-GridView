@@ -13,7 +13,7 @@ var {
 
 var rnmd = require('react-native-material-design');
 
-var ReactNativeGridView = require('./GridViewComponent');
+var ReactNativeGridView = require('./gridview');
 var {
   Ripple,
 } = rnmd;
